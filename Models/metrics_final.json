@@ -1,0 +1,163 @@
+{
+  "final_metrics": {
+    "Accuracy": 0.7484739395836594,
+    "F1": 0.8365707312112275,
+    "ROC_AUC": 0.7049640714095201,
+    "PR_AUC": 0.8740575825795075
+  },
+  "cv_results": [
+    {
+      "Modelo": "Baseline",
+      "Accuracy_mean": 0.7893171590686755,
+      "Accuracy_std": 1.1102230246251565e-16,
+      "F1_mean": 0.8822551721121462,
+      "F1_std": 0.0,
+      "ROC_AUC_mean": 0.5,
+      "ROC_AUC_std": 0.0,
+      "PR_AUC_mean": 0.7893171590686755,
+      "PR_AUC_std": 1.1102230246251565e-16,
+      "Fit_time": 0.12398282686869304
+    },
+    {
+      "Modelo": "RegLog",
+      "Accuracy_mean": 0.7466249266288397,
+      "Accuracy_std": 0.004389802415037362,
+      "F1_mean": 0.8356484711660331,
+      "F1_std": 0.003081236005542181,
+      "ROC_AUC_mean": 0.7024428659724095,
+      "ROC_AUC_std": 0.0028818018443931242,
+      "PR_AUC_mean": 0.8749182766069227,
+      "PR_AUC_std": 0.0006206047437994064,
+      "Fit_time": 0.7394685745239258
+    },
+    {
+      "Modelo": "RandomForest",
+      "Accuracy_mean": 0.76958194743364,
+      "Accuracy_std": 0.004898588181668084,
+      "F1_mean": 0.8539602298721735,
+      "F1_std": 0.003546638517462045,
+      "ROC_AUC_mean": 0.7049123091303874,
+      "ROC_AUC_std": 0.004149117620322312,
+      "PR_AUC_mean": 0.8754546686758284,
+      "PR_AUC_std": 0.0010381337869630417,
+      "Fit_time": 4.943727811177571
+    },
+    {
+      "Modelo": "XGBoost",
+      "Accuracy_mean": 0.7482293093328116,
+      "Accuracy_std": 0.0016326080030903381,
+      "F1_mean": 0.8372637361945857,
+      "F1_std": 0.0012219727589385507,
+      "ROC_AUC_mean": 0.6998216082116526,
+      "ROC_AUC_std": 0.0020770180525401722,
+      "PR_AUC_mean": 0.8734117441888293,
+      "PR_AUC_std": 0.000905233371051566,
+      "Fit_time": 1.2148466904958088
+    }
+  ],
+  "feature_names": [
+    "delivery_days_real",
+    "delivery_delay_days",
+    "is_late",
+    "total_value",
+    "total_freight",
+    "payment_total",
+    "payment_installments_max",
+    "n_items",
+    "n_distinct_sellers",
+    "is_weekend",
+    "purchase_dow",
+    "first_product_category_auto",
+    "first_product_category_baby",
+    "first_product_category_bed_bath_table",
+    "first_product_category_computers_accessories",
+    "first_product_category_cool_stuff",
+    "first_product_category_electronics",
+    "first_product_category_fashion_bags_accessories",
+    "first_product_category_furniture_decor",
+    "first_product_category_garden_tools",
+    "first_product_category_health_beauty",
+    "first_product_category_housewares",
+    "first_product_category_office_furniture",
+    "first_product_category_other",
+    "first_product_category_perfumery",
+    "first_product_category_pet_shop",
+    "first_product_category_sports_leisure",
+    "first_product_category_stationery",
+    "first_product_category_telephony",
+    "first_product_category_toys",
+    "first_product_category_unknown",
+    "first_product_category_watches_gifts",
+    "customer_state_AC",
+    "customer_state_AL",
+    "customer_state_AM",
+    "customer_state_AP",
+    "customer_state_BA",
+    "customer_state_CE",
+    "customer_state_DF",
+    "customer_state_ES",
+    "customer_state_GO",
+    "customer_state_MA",
+    "customer_state_MG",
+    "customer_state_MS",
+    "customer_state_MT",
+    "customer_state_PA",
+    "customer_state_PB",
+    "customer_state_PE",
+    "customer_state_PI",
+    "customer_state_PR",
+    "customer_state_RJ",
+    "customer_state_RN",
+    "customer_state_RO",
+    "customer_state_RR",
+    "customer_state_RS",
+    "customer_state_SC",
+    "customer_state_SE",
+    "customer_state_SP",
+    "customer_state_TO",
+    "main_payment_type_boleto",
+    "main_payment_type_credit_card",
+    "main_payment_type_debit_card",
+    "main_payment_type_voucher"
+  ],
+  "confusion_matrix": [
+    [
+      2007,
+      2031
+    ],
+    [
+      2790,
+      12339
+    ]
+  ],
+  "classification_report": {
+    "Negativa": {
+      "precision": 0.41838649155722324,
+      "recall": 0.4970282317979198,
+      "f1-score": 0.45432937181663835,
+      "support": 4038.0
+    },
+    "Positiva": {
+      "precision": 0.8586638830897704,
+      "recall": 0.8155859607376561,
+      "f1-score": 0.8365707312112275,
+      "support": 15129.0
+    },
+    "accuracy": 0.7484739395836594,
+    "macro avg": {
+      "precision": 0.6385251873234968,
+      "recall": 0.6563070962677879,
+      "f1-score": 0.645450051513933,
+      "support": 19167.0
+    },
+    "weighted avg": {
+      "precision": 0.7659086210764963,
+      "recall": 0.7484739395836594,
+      "f1-score": 0.7560421868779802,
+      "support": 19167.0
+    }
+  },
+  "target_mean_train": 0.7893171590686754,
+  "n_train": 76665,
+  "n_test": 19167
+}

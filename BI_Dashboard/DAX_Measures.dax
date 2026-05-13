@@ -1,0 +1,218 @@
+// ============================================================================
+//  DAX MEASURES — Olist Marketplace Dashboard
+//  Cómo usar: en Power BI Desktop, después de cargar las 8 tablas, crear
+//  una tabla "_Measures" (Nueva tabla → _Measures = ROW("dummy",0)) y
+//  agregar cada medida (clic derecho sobre _Measures → Nueva medida).
+//  Los nombres entre comillas son los pegados tal cual.
+// ============================================================================
+
+
+// ---------------------------------------------------------------------------
+//  GRUPO 1 — VOLUMEN Y CRECIMIENTO
+// ---------------------------------------------------------------------------
+
+"N_Orders" =
+DISTINCTCOUNT( OrderItems[order_id] )
+
+"N_Items" =
+COUNTROWS( OrderItems )
+
+"N_Customers_Unique" =
+DISTINCTCOUNT( Customers[customer_unique_id] )
+
+"N_Sellers_Active" =
+DISTINCTCOUNT( OrderItems[seller_id] )
+
+"GMV_Total" =
+SUM( OrderItems[price] ) + SUM( OrderItems[freight_value] )
+
+"GMV_Productos" =
+SUM( OrderItems[price] )
+
+"GMV_Flete" =
+SUM( OrderItems[freight_value] )
+
+"Ticket_Promedio" =
+DIVIDE( [GMV_Total], [N_Orders] )
+
+"Items_Por_Orden" =
+DIVIDE( [N_Items], [N_Orders] )
+
+
+// ---------------------------------------------------------------------------
+//  GRUPO 2 — INTELIGENCIA DE TIEMPO
+// ---------------------------------------------------------------------------
+
+"N_Orders_PrevMonth" =
+CALCULATE( [N_Orders], DATEADD( 'Date'[date], -1, MONTH ) )
+
+"N_Orders_PrevYear" =
+CALCULATE( [N_Orders], DATEADD( 'Date'[date], -12, MONTH ) )
+
+"MoM_Growth_%" =
+DIVIDE( [N_Orders] - [N_Orders_PrevMonth], [N_Orders_PrevMonth] )
+
+"YoY_Growth_%" =
+DIVIDE( [N_Orders] - [N_Orders_PrevYear], [N_Orders_PrevYear] )
+
+"GMV_YTD" =
+TOTALYTD( [GMV_Total], 'Date'[date] )
+
+
+// ---------------------------------------------------------------------------
+//  GRUPO 3 — SATISFACCIÓN (CSAT)
+// ---------------------------------------------------------------------------
+
+"N_Reviews" =
+COUNTROWS( FILTER( Reviews, NOT ISBLANK( Reviews[review_score] ) ) )
+
+"N_Reviews_Positive" =
+CALCULATE( COUNTROWS( Reviews ), Reviews[is_positive_review] = 1 )
+
+"N_Reviews_Negative" =
+CALCULATE( COUNTROWS( Reviews ), Reviews[is_positive_review] = 0 )
+
+"CSAT_%" =
+DIVIDE( [N_Reviews_Positive], [N_Reviews] )
+
+"Detractor_%" =
+DIVIDE( [N_Reviews_Negative], [N_Reviews] )
+
+"Avg_Review_Score" =
+AVERAGE( Reviews[review_score] )
+
+"CSAT_PrevMonth" =
+CALCULATE( [CSAT_%], DATEADD( 'Date'[date], -1, MONTH ) )
+
+"CSAT_Delta_pp" =
+([CSAT_%] - [CSAT_PrevMonth]) * 100
+
+
+// ---------------------------------------------------------------------------
+//  GRUPO 4 — LOGÍSTICA
+// ---------------------------------------------------------------------------
+
+"N_Delivered" =
+CALCULATE(
+    [N_Orders],
+    FILTER( OrderItems, OrderItems[order_status] = "delivered" )
+)
+
+"OTIF_%" =
+DIVIDE(
+    CALCULATE( [N_Delivered],
+               FILTER( OrderItems, OrderItems[is_late] = 0 ) ),
+    [N_Delivered]
+)
+
+"Late_Orders_%" = 1 - [OTIF_%]
+
+"Avg_Delivery_Days" =
+CALCULATE(
+    AVERAGE( OrderItems[delivery_days_real] ),
+    FILTER( OrderItems, OrderItems[order_status] = "delivered" )
+)
+
+"Median_Delivery_Days" =
+CALCULATE(
+    MEDIAN( OrderItems[delivery_days_real] ),
+    FILTER( OrderItems, OrderItems[order_status] = "delivered" )
+)
+
+"P90_Delivery_Days" =
+CALCULATE(
+    PERCENTILE.INC( OrderItems[delivery_days_real], 0.9 ),
+    FILTER( OrderItems, OrderItems[order_status] = "delivered" )
+)
+
+"Avg_Delivery_Delay_Days" =
+CALCULATE(
+    AVERAGE( OrderItems[delivery_delay_days] ),
+    FILTER( OrderItems, OrderItems[order_status] = "delivered" )
+)
+
+
+// ---------------------------------------------------------------------------
+//  GRUPO 5 — RIESGO Y CONCENTRACIÓN
+// ---------------------------------------------------------------------------
+
+"Cancel_Rate_%" =
+DIVIDE(
+    CALCULATE( [N_Orders],
+               FILTER( OrderItems, OrderItems[order_status] = "canceled" ) ),
+    [N_Orders]
+)
+
+"Top3_States_Share_%" =
+VAR TopStates =
+    TOPN( 3,
+          SUMMARIZE( Customers, Customers[customer_state],
+                     "n", [N_Orders] ),
+          [n], DESC )
+RETURN
+    DIVIDE(
+        SUMX( TopStates, [n] ),
+        [N_Orders]
+    )
+
+"Top10_Sellers_GMV_Share_%" =
+VAR TopSellers =
+    TOPN( 10,
+          SUMMARIZE( OrderItems, OrderItems[seller_id],
+                     "gmv", [GMV_Total] ),
+          [gmv], DESC )
+RETURN
+    DIVIDE(
+        SUMX( TopSellers, [gmv] ),
+        [GMV_Total]
+    )
+
+
+// ---------------------------------------------------------------------------
+//  GRUPO 6 — PAGOS
+// ---------------------------------------------------------------------------
+
+"Avg_Payment_Installments" =
+AVERAGE( Payments[payment_installments] )
+
+"Pct_Pagos_Credito" =
+DIVIDE(
+    CALCULATE( COUNTROWS( Payments ),
+               Payments[payment_type] = "credit_card" ),
+    COUNTROWS( Payments )
+)
+
+"Pct_Pagos_Boleto" =
+DIVIDE(
+    CALCULATE( COUNTROWS( Payments ),
+               Payments[payment_type] = "boleto" ),
+    COUNTROWS( Payments )
+)
+
+
+// ---------------------------------------------------------------------------
+//  GRUPO 7 — KPIs CON FORMATO CONDICIONAL (semáforos)
+// ---------------------------------------------------------------------------
+//  Estos *flags* devuelven 1/2/3 según el rango; se usan en formato
+//  condicional de tarjetas (verde/naranja/rojo).
+
+"CSAT_Status_Flag" =
+SWITCH( TRUE(),
+    [CSAT_%] >= 0.80, 1,    // verde
+    [CSAT_%] >= 0.70, 2,    // naranja
+    3                       // rojo
+)
+
+"OTIF_Status_Flag" =
+SWITCH( TRUE(),
+    [OTIF_%] >= 0.95, 1,
+    [OTIF_%] >= 0.90, 2,
+    3
+)
+
+"Top3_Concentration_Flag" =
+SWITCH( TRUE(),
+    [Top3_States_Share_%] < 0.50, 1,   // sano
+    [Top3_States_Share_%] < 0.70, 2,
+    3                                   // riesgo alto
+)
