@@ -1,0 +1,84 @@
+{
+  "name": "Olist Marketplace Theme",
+  "dataColors": [
+    "#1F3A68",
+    "#FDB813",
+    "#2E7D32",
+    "#C62828",
+    "#EF6C00",
+    "#90A4AE",
+    "#6A1B9A",
+    "#00838F"
+  ],
+  "background": "#F4F6F9",
+  "foreground": "#1F3A68",
+  "tableAccent": "#FDB813",
+  "good": "#2E7D32",
+  "neutral": "#EF6C00",
+  "bad": "#C62828",
+  "maximum": "#2E7D32",
+  "center": "#FDB813",
+  "minimum": "#C62828",
+  "null": "#90A4AE",
+  "textClasses": {
+    "title": {
+      "fontFace": "Segoe UI",
+      "fontSize": 22,
+      "color": "#1F3A68"
+    },
+    "header": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 14,
+      "color": "#1F3A68"
+    },
+    "label": {
+      "fontFace": "Segoe UI",
+      "fontSize": 11,
+      "color": "#1F3A68"
+    },
+    "callout": {
+      "fontFace": "Segoe UI",
+      "fontSize": 28,
+      "color": "#1F3A68"
+    }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [
+          {
+            "show": true,
+            "color": { "solid": { "color": "#FFFFFF" } },
+            "transparency": 0
+          }
+        ],
+        "border": [
+          {
+            "show": true,
+            "color": { "solid": { "color": "#E0E4EA" } },
+            "radius": 6
+          }
+        ],
+        "title": [
+          {
+            "show": true,
+            "fontColor": { "solid": { "color": "#1F3A68" } },
+            "fontSize": 14,
+            "fontFamily": "Segoe UI Semibold",
+            "alignment": "left"
+          }
+        ]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [
+          {
+            "color": { "solid": { "color": "#F4F6F9" } },
+            "transparency": 0
+          }
+        ]
+      }
+    }
+  }
+}
