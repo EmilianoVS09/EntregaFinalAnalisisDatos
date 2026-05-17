@@ -2,7 +2,8 @@
 
 **Proyecto:** Desarrollo de un Proyecto de Análisis de Datos y Modelo Predictivo para una Aplicación de Negocio
 **Caso de estudio:** *Brazilian E-Commerce Public Dataset by Olist* (98 666 órdenes · 2017-2018)
-**Autor:** Carlos David Moreno · ITM · Mayo 2026
+**Autores:** Carlos Alberto Moreno David · Juan Esteban García Ocampo · Emiliano Vélez Suárez · Sebastián Ciro Medellín
+**Institución:** ITM · Mayo 2026
 **Asignaturas integradas:** Inteligencia de Negocios · Analítica de Datos · Aprendizaje Computacional
 
 ---
